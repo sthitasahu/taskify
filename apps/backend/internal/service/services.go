@@ -9,6 +9,9 @@ import (
 type Services struct {
 	Auth *AuthService
 	Job  *job.JobService
+	Todo *TodoService
+	Category *CategoryService
+	Comment *CommentService
 }
 
 func NewServices(s *server.Server, repos *repository.Repositories) (*Services, error) {
@@ -17,5 +20,8 @@ func NewServices(s *server.Server, repos *repository.Repositories) (*Services, e
 	return &Services{
 		Job:  s.Job,
 		Auth: authService,
-	}, nil
+		Category: NewCategoryService(s, repos.Category),
+		Comment:  NewCommentService(s, repos.Comment, repos.Todo),
+		Todo:     NewTodoService(s,repos.Todo,repos.Category),
+    },nil
 }
